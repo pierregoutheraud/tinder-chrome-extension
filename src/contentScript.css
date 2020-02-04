@@ -1,0 +1,45 @@
+#sendMessageToAll {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 99999;
+  padding: 10px;
+  background: white;
+  border-radius: 5px;
+  width: 300px;
+}
+
+#sendMessageToAll textarea {
+  height: 150px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  resize: none;
+}
+
+#sendMessageToAll button {
+  border: none;
+  background: green;
+  color: white;
+  padding: 0 10px;
+  border-radius: 5px;
+  height: 40px;
+  line-height: 30px;
+  margin-top: 5px;
+  background: linear-gradient(262deg, #ff7854, #fd267d);
+  cursor: pointer;
+  transition: 500ms opacity;
+}
+#sendMessageToAll button:hover {
+  opacity: 0.6;
+}
+
+#sendMessageToAll p {
+  /* text-align: center; */
+  font-size: 14px;
+  padding: 0 20px;
+  margin: 10px 0 0 0;
+  color: rgba(0, 0, 0, 0.4);
+}
