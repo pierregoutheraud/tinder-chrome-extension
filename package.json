@@ -3,24 +3,24 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "parcel watch src/*.js --no-hmr",
-    "hmr": "parcel watch src/*.js --hmr-hostname localhost --hmr-port 63168",
-    "build": "parcel build src/*.js"
+    "start": "parcel watch src/contentScript.js src/background.js --hmr-hostname localhost --hmr-port 63168 --https --log-level 4",
+    "start-no-hmr": "parcel watch src/contentScript.js src/background.js --no-hmr",
+    "dev": "concurrently \"yarn parcel-contentScript\" \"yarn parcel-background\"",
+    "parcel-contentScript": "parcel watch src/contentScript.js --hmr-hostname localhost --hmr-port 63168 --https",
+    "parcel-background": "parcel watch src/background.js --hmr-hostname localhost --hmr-port 63169"
   },
   "dependencies": {
-    "babel-plugin-transform-async-to-generator": "^6.24.1",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
+    "autoprefixer": "^9.7.4",
+    "classnames": "^2.2.6",
     "codemirror": "^5.40.0",
-    "postcss-modules": "^1.3.2",
-    "react": "^16.5.1",
+    "postcss-modules": "^1.5.0",
+    "react": "^16.12.0",
     "react-codemirror": "^1.0.0",
-    "react-dom": "^16.5.1"
+    "react-dom": "^16.12.0"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "cssnano": "^4.1.0"
+    "babel-polyfill": "^6.26.0",
+    "cssnano": "^4.1.0",
+    "parcel-bundler": "^1.12.4"
   }
 }

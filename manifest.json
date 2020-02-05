@@ -1,13 +1,12 @@
 {
-  "name": "tinder message all",
+  "name": "Tinder Chrome Extension",
   "version": "1.0.0",
   "manifest_version": 2,
-  "description": "This extension was created with the awesome extensionizr.com",
-  "homepage_url": "http://extensionizr.com",
+  "description": "Tinder Chrome Extension",
+  "web_accessible_resources": ["dist/contentScript.css"],
   "content_scripts": [
     {
       "matches": ["https://tinder.com/*"],
-      "css": ["dist/contentScript.css"],
       "js": ["dist/contentScript.js"]
     }
   ],
@@ -21,5 +20,5 @@
     "webRequest",
     "webRequestBlocking"
   ],
-  "content_security_policy": "default-src 'self'; script-src 'self' 'unsafe-eval'; connect-src wss://localhost:63168/ ws://localhost:63168/; font-src *; style-src *;"
+  "content_security_policy": "default-src 'self'; script-src 'self' 'unsafe-eval'; connect-src ws://localhost:63168/ wss://localhost:63168/ ws://localhost:63169/ wss://localhost:63169/; font-src *; style-src *;"
 }

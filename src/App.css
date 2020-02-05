@@ -1,0 +1,22 @@
+.container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 500;
+  height: 200px;
+  width: 200px;
+  background: red;
+}
+
+.text {
+  color: white;
+  padding: 20px;
+}
+
+.text34 {
+  color: yellow;
+}
+
+.text345 {
+  color: white;
+}
