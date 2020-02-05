@@ -1,4 +1,4 @@
-#sendMessageToAll {
+.container {
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -9,17 +9,24 @@
   background: white;
   border-radius: 5px;
   width: 300px;
+  box-shadow: 0px 0px 0 4px rgba(0, 0, 0, 0.05);
 }
 
-#sendMessageToAll textarea {
+.container h2 {
+  text-align: center;
+}
+
+.container textarea {
   height: 150px;
-  border: 2px solid rgba(0, 0, 0, 0.1);
-  padding: 10px;
+  /* border: 2px solid rgba(0, 0, 0, 0.1); */
+  padding: 15px;
   border-radius: 5px;
   resize: none;
+  background: rgba(0, 0, 0, 0.08);
+  /* color: white; */
 }
 
-#sendMessageToAll button {
+.container button {
   border: none;
   background: green;
   color: white;
@@ -32,14 +39,14 @@
   cursor: pointer;
   transition: 500ms opacity;
 }
-#sendMessageToAll button:hover {
+.container button:hover {
   opacity: 0.6;
 }
 
-#sendMessageToAll p {
-  /* text-align: center; */
-  font-size: 14px;
-  padding: 0 20px;
+.container p {
+  font-size: 15px;
+  padding: 0 10px;
   margin: 10px 0 0 0;
-  color: rgba(0, 0, 0, 0.4);
+  color: rgba(0, 0, 0, 0.6);
+  text-align: center;
 }
