@@ -69,13 +69,13 @@ class Tinder {
     */
   }
 
-  fetchMatches(pageToken = null) {
+  fetchMatches(onlyNew = false, pageToken = null) {
     const pageTokenQueryParam =
       pageToken !== null ? `&page_token=${pageToken}` : "";
-    // return this.get(`/v2/matches?count=100${pageTokenQueryParam}`);
     return this.get(
-      `/v2/matches?count=100&is_tinder_u=false&locale=en&message=0${pageTokenQueryParam}`
-      // `/v2/matches?count=100&is_tinder_u=false&locale=en&message=1${pageTokenQueryParam}`
+      `/v2/matches?count=100&is_tinder_u=false&locale=en&message=${
+        onlyNew ? "0" : "1"
+      }${pageTokenQueryParam}`
     );
   }
 
@@ -86,17 +86,17 @@ class Tinder {
   async sendMessages(message, matches, onlyToNew = false, callback = () => {}) {
     for (let i = 0; i < matches.length; i++) {
       const match = matches[i];
+      console.log(match);
       const { messages } = match;
       const m = message.replace("*name*", match.person.name);
       let data = {
-        // message: `Hello ${match.person.name} 👋 Tu t'occupes comment ce soir?`,
         message: m,
       };
 
       console.log(messages.length);
       if (!onlyToNew || (onlyToNew && !messages.length)) {
         console.log(`Send message to ${match.person.name}`, data.message);
-        // await this.post(`/user/matches/${match._id}`, data);
+        await this.post(`/user/matches/${match._id}`, data);
         await this.wait(100);
         callback(i + 1, matches.length);
       }
@@ -117,7 +117,7 @@ class Tinder {
     */
   }
 
-  async fetchAllMatches() {
+  async fetchAllMatches(onlyNew = false) {
     console.log("getAllMatches...");
     let allMatches = [];
     let end = false;
@@ -125,7 +125,7 @@ class Tinder {
     while (!end) {
       let data;
       try {
-        data = await this.fetchMatches(nextPageToken);
+        data = await this.fetchMatches(onlyNew, nextPageToken);
         allMatches = [...allMatches, ...data.matches];
         if (data.next_page_token) {
           nextPageToken = data.next_page_token;

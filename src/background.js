@@ -24,8 +24,8 @@ window.chrome.webRequest.onBeforeSendHeaders.addListener(
 // Send cross origin requests
 // https://www.chromium.org/Home/chromium-security/extension-content-script-fetches/
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  const { type, method, url, headers } = request;
-  if (type === "FETCH" && method === "GET") {
+  const { type, method, url, headers, data } = request;
+  if (type === "FETCH") {
     console.log(method, url, headers);
     fetch(url, {
       credentials: "omit",

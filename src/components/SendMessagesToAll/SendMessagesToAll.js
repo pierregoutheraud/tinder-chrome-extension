@@ -14,14 +14,16 @@ export default function SendMessagesToAll() {
   const [disabled, setDisabled] = useState(false);
   const [message, setMessage] = useState("");
   const promiseMatches = useRef(null);
-  const [onlyToNew, setOnlyToNew] = useState(false);
+  const [onlyNew, setOnlyNew] = useState(true);
 
-  useEffect(() => {
-    promiseMatches.current = tinder.fetchAllMatches();
-    promiseMatches.current.then(matches => {
-      console.log(matches);
-    });
-  }, []);
+  // useEffect(() => {
+  //   promiseMatches.current = tinder.fetchAllMatches();
+  //   promiseMatches.current.then(matches => {
+  //     console.log(matches[0].person);
+  //     console.log(matches.length);
+  //     console.log(matches.some(m => m.person.name === "Emma"));
+  //   });
+  // }, []);
 
   async function handleClick() {
     if (!message.length) {
@@ -31,7 +33,7 @@ export default function SendMessagesToAll() {
     if (
       !window.confirm(
         `Are you sure you want to send this message to ${
-          onlyToNew ? "your new" : "all your"
+          onlyNew ? "your new" : "all your"
         } matches ?`
       )
     ) {
@@ -41,14 +43,17 @@ export default function SendMessagesToAll() {
     setDisabled(true);
     setButtonText(BUTTON_TEXTS.FETCHING);
 
-    const matches = await promiseMatches.current;
-    console.log(matches);
+    const matches = await tinder.fetchAllMatches(onlyNew);
 
     setButtonText(BUTTON_TEXTS.SENDING);
-    await tinder.sendMessages(message, matches, onlyToNew, (current, total) => {
-      console.log(current, total);
-      setButtonText(`${BUTTON_TEXTS.SENDING} (${current}/${total})`);
-    });
+    try {
+      await tinder.sendMessages(message, matches, onlyNew, (current, total) => {
+        console.log(current, total);
+        setButtonText(`${BUTTON_TEXTS.SENDING} (${current}/${total})`);
+      });
+    } catch (e) {
+      console.log(e);
+    }
 
     setDisabled(false);
     setButtonText(BUTTON_TEXTS.SENT);
@@ -79,12 +84,12 @@ Example: "Hello *name*!" will output "Hello Nancy!"`}
       <div className={styles.checkboxField}>
         <input
           type="checkbox"
-          id="onlyToNew"
-          name="onlyToNew"
-          checked={onlyToNew}
-          onChange={() => setOnlyToNew(!onlyToNew)}
+          id="onlyNew"
+          name="onlyNew"
+          checked={onlyNew}
+          onChange={() => setOnlyNew(!onlyNew)}
         />
-        <label htmlFor="onlyToNew">Only send to new matches</label>
+        <label htmlFor="onlyNew">Only send to new matches</label>
       </div>
     </div>
   );
