@@ -4,7 +4,6 @@ class Tinder {
   }
 
   setToken(token) {
-    console.log("api setToken", token);
     this.xAuthToken = token;
   }
 
@@ -86,39 +85,22 @@ class Tinder {
   async sendMessages(message, matches, onlyToNew = false, callback = () => {}) {
     for (let i = 0; i < matches.length; i++) {
       const match = matches[i];
-      console.log(match);
       const { messages } = match;
       const m = message.replace("*name*", match.person.name);
       let data = {
         message: m,
       };
 
-      console.log(messages.length);
       if (!onlyToNew || (onlyToNew && !messages.length)) {
-        console.log(`Send message to ${match.person.name}`, data.message);
         await this.post(`/user/matches/${match._id}`, data);
         await this.wait(100);
         callback(i + 1, matches.length);
       }
     }
     return true;
-
-    /*
-    return Promise.all(
-      matches.map(match => {
-        const m = message.replace("*name*", match.person.name);
-        console.log("Send message to", match._id);
-        const data = {
-          message: m,
-        };
-        return this.post(`/user/matches/${match._id}`, data);
-      })
-    );
-    */
   }
 
   async fetchAllMatches(onlyNew = false) {
-    console.log("getAllMatches...");
     let allMatches = [];
     let end = false;
     let nextPageToken = null;
@@ -137,7 +119,6 @@ class Tinder {
         break;
       }
     }
-    console.log("getAllMatches... done.");
     return allMatches;
   }
 

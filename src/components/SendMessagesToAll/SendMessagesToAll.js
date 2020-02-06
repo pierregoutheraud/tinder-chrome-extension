@@ -46,9 +46,9 @@ export default function SendMessagesToAll() {
     const matches = await tinder.fetchAllMatches(onlyNew);
 
     setButtonText(BUTTON_TEXTS.SENDING);
+
     try {
       await tinder.sendMessages(message, matches, onlyNew, (current, total) => {
-        console.log(current, total);
         setButtonText(`${BUTTON_TEXTS.SENDING} (${current}/${total})`);
       });
     } catch (e) {
