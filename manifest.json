@@ -20,5 +20,5 @@
     "webRequest",
     "webRequestBlocking"
   ],
-  "content_security_policy": "default-src 'self'; script-src 'self' 'unsafe-eval'; connect-src ws://localhost:63168/ wss://localhost:63168/ ws://localhost:63169/ wss://localhost:63169/; font-src *; style-src *;"
+  "content_security_policy": "default-src 'self'; script-src 'self' 'unsafe-eval'; connect-src https://api.gotinder.com/ ws://localhost:63168/ wss://localhost:63168/ ws://localhost:63169/ wss://localhost:63169/; font-src *; style-src *;"
 }

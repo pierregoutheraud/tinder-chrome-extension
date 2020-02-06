@@ -4,6 +4,7 @@ class Tinder {
   }
 
   setToken(token) {
+    console.log("api setToken", token);
     this.xAuthToken = token;
   }
 
@@ -19,36 +20,70 @@ class Tinder {
   }
 
   get(path) {
-    const url = this.url + path;
-    return fetch(url, {
-      headers: this.getHeaders(),
-    })
+    return new Promise(resolve => {
+      const url = this.url + path;
+      chrome.runtime.sendMessage(
+        { type: "FETCH", method: "GET", url, headers: this.getHeaders() },
+        data => {
+          resolve(data);
+        }
+      );
+    });
+
+    /*
+    return window
+      .fetch(url, {
+        headers: this.getHeaders(),
+      })
       .then(res => res.json())
       .then(json => {
         return json.data;
       });
+      */
   }
 
   post(path, data) {
+    return new Promise(resolve => {
+      const url = this.url + path;
+      chrome.runtime.sendMessage(
+        {
+          type: "FETCH",
+          method: "POST",
+          url,
+          headers: this.getHeaders(),
+          data,
+        },
+        data => {
+          resolve(data);
+        }
+      );
+    });
+
+    /*
     const url = this.url + path;
-    return fetch(url, {
+    return window.fetch(url, {
       method: "POST",
       headers: this.getHeaders(),
       body: JSON.stringify(data),
     });
+    */
   }
 
   fetchMatches(pageToken = null) {
     const pageTokenQueryParam =
       pageToken !== null ? `&page_token=${pageToken}` : "";
-    return this.get(`/v2/matches?count=100${pageTokenQueryParam}`);
+    // return this.get(`/v2/matches?count=100${pageTokenQueryParam}`);
+    return this.get(
+      `/v2/matches?count=100&is_tinder_u=false&locale=en&message=0${pageTokenQueryParam}`
+      // `/v2/matches?count=100&is_tinder_u=false&locale=en&message=1${pageTokenQueryParam}`
+    );
   }
 
   wait(duration = 1000) {
     return new Promise(resolve => setTimeout(resolve, duration));
   }
 
-  async sendMessage(message, matches) {
+  async sendMessages(message, matches, onlyToNew = false, callback = () => {}) {
     for (let i = 0; i < matches.length; i++) {
       const match = matches[i];
       const { messages } = match;
@@ -58,30 +93,13 @@ class Tinder {
         message: m,
       };
 
-      console.log(`Send message to ${match.person.name}\n`, data.message);
-      await this.post(`/user/matches/${match._id}`, data);
-      await this.wait(100);
-
-      // if (!messages.length) {
-      //   await this.post(`/user/matches/${match._id}`, data);
-      //   await this.wait(100);
-      // }
-
-      /*
-      const hasMessage =
-        messages.length &&
-        messages.some(m => {
-          return m.message.includes("Hello Justine! Tu t'occupes");
-        });
-      if (hasMessage) {
-        let data = {
-          message: `oula j'ai craqué moi, c'est qui Justine ? :v`,
-        };
-        await this.post(`/user/matches/${match._id}`, data);
-      } else {
+      console.log(messages.length);
+      if (!onlyToNew || (onlyToNew && !messages.length)) {
+        console.log(`Send message to ${match.person.name}`, data.message);
         // await this.post(`/user/matches/${match._id}`, data);
+        await this.wait(100);
+        callback(i + 1, matches.length);
       }
-      */
     }
     return true;
 
@@ -99,21 +117,28 @@ class Tinder {
     */
   }
 
-  async getAllMatches() {
-    let matches = [];
+  async fetchAllMatches() {
+    console.log("getAllMatches...");
+    let allMatches = [];
     let end = false;
     let nextPageToken = null;
     while (!end) {
-      console.log("Fetching matches...");
-      const data = await this.fetchMatches(nextPageToken);
-      matches = [...matches, ...data.matches];
-      if (data.next_page_token) {
-        nextPageToken = data.next_page_token;
-      } else {
-        end = true;
+      let data;
+      try {
+        data = await this.fetchMatches(nextPageToken);
+        allMatches = [...allMatches, ...data.matches];
+        if (data.next_page_token) {
+          nextPageToken = data.next_page_token;
+        } else {
+          end = true;
+        }
+      } catch (e) {
+        console.log("Error getAllMatches", e);
+        break;
       }
     }
-    return matches;
+    console.log("getAllMatches... done.");
+    return allMatches;
   }
 
   async getRecs() {

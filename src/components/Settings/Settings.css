@@ -1,0 +1,26 @@
+.container label {
+  display: flex;
+  justify-content: center;
+}
+
+.container label span {
+  margin-right: 10px;
+}
+
+.container fieldset {
+  border: none;
+  padding: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 10px 0;
+}
+
+.container fieldset:last-child {
+  border: none;
+}
+
+.container a {
+  text-decoration: underline;
+}
+.container a:hover {
+  text-decoration: none;
+}

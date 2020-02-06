@@ -10,13 +10,20 @@
     "parcel-background": "parcel watch src/background.js --hmr-hostname localhost --hmr-port 63169"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.7.1",
     "autoprefixer": "^9.7.4",
     "classnames": "^2.2.6",
     "codemirror": "^5.40.0",
     "postcss-modules": "^1.5.0",
-    "react": "^16.12.0",
+    "react": "^16.8",
     "react-codemirror": "^1.0.0",
-    "react-dom": "^16.12.0"
+    "react-dom": "^16.12.0",
+    "react-native": ">=0.59",
+    "react-redux": "^7.1.3",
+    "react-switch": "^5.0.1",
+    "redux": ">4.0.0",
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "babel-polyfill": "^6.26.0",

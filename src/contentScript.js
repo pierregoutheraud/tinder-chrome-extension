@@ -5,8 +5,7 @@ import tinder from "./lib/Tinder.js";
 // import "./contentScript.css";
 import App from "./App";
 
-console.log("Restart contentScript.js");
-
+let rendered = false;
 const rootId = "rootReactChromeExtension";
 function render() {
   let div = document.getElementById(rootId);
@@ -16,8 +15,12 @@ function render() {
     document.body.appendChild(div);
   }
   ReactDOM.render(<App />, div);
+  rendered = true;
 }
-render();
+
+// if (rendered) {
+//   render();
+// }
 
 const whenToken = new Promise(resolve => {
   chrome.extension.onMessage.addListener(function(request) {
@@ -29,10 +32,10 @@ const whenToken = new Promise(resolve => {
   });
 });
 
-// const whenMatches = whenToken.then(token => {
-//   tinder.setToken(token);
-//   render();
-// });
+whenToken.then(token => {
+  tinder.setToken(token);
+  return render();
+});
 
 // FOR HMR TO WORK CORRECTLY https://parceljs.org/hmr.html
 // if (module.hot) {
@@ -64,11 +67,12 @@ injectStyles(chrome.extension.getURL("dist/contentScript.css"));
 if (module.hot) {
   module.hot.dispose(function() {
     // module is about to be replaced
-    console.log("dispose");
+    // console.log("dispose");
   });
 
   module.hot.accept(function() {
     // module or one of its dependencies was just updated
-    console.log("accept");
+    // console.log("accept");
+    render();
   });
 }
